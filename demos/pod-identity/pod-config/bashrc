@@ -1,0 +1,164 @@
+# ~/.bash_profile for Micah Hausler
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+###################
+# Window controls #
+###################
+
+# Check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+####################
+# default settings #
+####################
+
+# TODO: always cd?
+if [ -d /mnt/demo ]; then
+    cd /mnt/demo
+else
+    cd ~/;
+fi
+
+set -o vi;
+#
+###########
+# HISTORY #
+###########
+
+# TODO: rotate history file
+
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoredups:ignorespace
+# append to the history file, don't overwrite it
+shopt -s histappend
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=10000000
+HISTFILESIZE=10000000
+
+#########
+# COLOR #
+#########
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    # ls aliases
+    alias ls='ls -G'
+    alias ll='ls -alFG'
+    alias la='ls -AG'
+    alias l='ls -lhFG'
+else
+    alias ls='ls --color'
+    alias ll='ls -alF --color'
+    alias la='ls -A --color'
+    alias l='ls -lhF --color'
+
+fi
+
+###########
+# Aliases #
+###########
+
+# ps aliases
+alias pss="ps -o pid,ppid,ruser,command | head -n 1;ps -A -o pid,ppid,ruser,command | grep -v grep | grep "
+
+# navigation aliases
+alias ..="cd ..";
+alias ...="cd ../..";
+
+alias k=kubectl
+alias y2j="python -c 'import sys, yaml, json; y=yaml.safe_load(sys.stdin.read()); print(json.dumps(y, default=lambda obj: obj.isoformat() if hasattr(obj, \"isoformat\") else obj))' "
+alias j2y="python -c 'import sys, yaml, json; y=yaml.safe_load(sys.stdin.read()); print(yaml.dump(y))'"
+
+
+export KUBE_EDITOR="vim"
+
+##########
+# Prompt #
+##########
+
+txtblk='\[\e[0;30m\]' # Black - Regular
+txtred='\[\e[0;31m\]' # Red
+txtgrn='\[\e[0;32m\]' # Green
+txtylw='\[\e[0;93m\]' # Yellow
+txtblu='\[\e[0;34m\]' # Blue
+txtpur='\[\e[0;35m\]' # Purple
+txtcyn='\[\e[0;96m\]' # Cyan
+txtwht='\[\e[0;37m\]' # White
+bldblk='\[\e[1;30m\]' # Black - Bold
+bldred='\[\e[1;31m\]' # Red
+bldgrn='\[\e[1;32m\]' # Green
+bldylw='\[\e[1;33m\]' # Yellow
+bldblu='\[\e[1;34m\]' # Blue
+bldpur='\[\e[1;35m\]' # Purple
+bldcyn='\[\e[1;36m\]' # Cyan
+bldwht='\[\e[1;37m\]' # White
+unkblk='\[\e[4;30m\]' # Black - Underline
+undred='\[\e[4;31m\]' # Red
+undgrn='\[\e[4;32m\]' # Green
+undylw='\[\e[4;33m\]' # Yellow
+undblu='\[\e[4;34m\]' # Blue
+undpur='\[\e[4;35m\]' # Purple
+undcyn='\[\e[4;36m\]' # Cyan
+undwht='\[\e[4;37m\]' # White
+bakblk='\[\e[40m\]'   # Black - Background
+bakred='\[\e[41m\]'   # Red
+badgrn='\[\e[42m\]'   # Green
+bakylw='\[\e[43m\]'   # Yellow
+bakblu='\[\e[44m\]'   # Blue
+bakpur='\[\e[45m\]'   # Purple
+bakcyn='\[\e[46m\]'   # Cyan
+bakwht='\[\e[47m\]'   # White
+txtrst='\[\e[0m\]'    # Text Reset
+
+NORMAL="\[\033[00m\]"
+BLUE="\[\033[01;34m\]"
+RED="\[\e[1;31m\]"
+YELLOW="\[\e[1;33m\]"
+GREEN="\[\e[1;32m\]"
+MAGENTA="\[\e[1;95m\]"
+PS1_WORKDIR="\W"
+PS1_HOSTNAME="\h"
+PS1_USER="\u"
+
+
+__cluster_ps1()
+{
+    if [ -n "$CLUSTER_NAME" ] && [ -n "$POD_NAMESPACE" ]; then
+        case "$CLUSTER_NAME" in
+          *red*)
+            echo "${bldred}${CLUSTER_NAME}${NORMAL}/${txtylw}${POD_NAMESPACE}${NORMAL}/"
+            ;;
+          *blue*)
+            echo "${bldblu}${CLUSTER_NAME}${NORMAL}/${txtylw}${POD_NAMESPACE}${NORMAL}/"
+            ;;
+          *gold*)
+            echo "${bldylw}${CLUSTER_NAME}${NORMAL}/${txtylw}${POD_NAMESPACE}${NORMAL}/"
+            ;;
+          *green*)
+            echo "${bldgrn}${CLUSTER_NAME}${NORMAL}/${txtylw}${POD_NAMESPACE}${NORMAL}/"
+            ;;
+          *)
+            echo "${bldgrn}${CLUSTER_NAME}${NORMAL}/${txtylw}${POD_NAMESPACE}${NORMAL}/"
+            ;;
+        esac
+    fi
+}
+
+export PROMPT_DIRTRIM="3"
+export PROMPT_COMMAND='PS1="${txtred}${PS1_USER}${NORMAL}@$(__cluster_ps1)${YELLOW}${PS1_HOSTNAME}${NORMAL}:${BLUE}${PS1_WORKDIR}${NORMAL}\$ "'
+export PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
+
+
+complete -C '/usr/local/bin/aws_completer' aws

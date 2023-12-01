@@ -1,0 +1,82 @@
+" .vimrc - File by Micah Hausler
+
+colorscheme default
+
+" show current cursor
+set cursorline
+" set cursorcolumn
+hi CursorLine   cterm=NONE ctermbg=darkblue ctermfg=white
+
+" Disable markdown folding
+let g:vim_markdown_folding_disabled = 1
+
+noremap ; :
+
+"sets line numbers to ON
+set number
+set tabstop=4
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+
+"Sets history to x amt of records
+set history=700
+
+" Enable filetype plugin
+filetype plugin on
+filetype indent on
+
+" Set textwidth to 80
+augroup markdownSpell
+    autocmd!
+    autocmd FileType markdown setlocal spell spelllang=en_us
+    autocmd FileType makrdown setlocal textwidth=80
+    autocmd BufRead,BufNewFile *.md setlocal spell spelllang=en_us
+    autocmd BufRead,BufNewFile *.md setlocal textwidth=80
+augroup END
+
+
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
+
+let g:sql_type_default = 'postgresql'
+let g:vim_markdown_frontmatter = 1
+
+"Always show current position
+set ruler
+
+"Highlight search things
+set hlsearch
+
+" highlight trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+
+autocmd BufWritePre *.rs %s/\s\+$//e " auto remove trailing witespace
+autocmd BufWritePre *.json %s/\s\+$//e " auto remove trailing witespace
+autocmd BufWritePre *.yml %s/\s\+$//e " auto remove trailing witespace
+autocmd BufWritePre *.yaml %s/\s\+$//e " auto remove trailing witespace
+autocmd BufWritePre *.go %s/\s\+$//e " auto remove trailing witespace
+"autocmd BufWritePre *.md %s/\s\+$//e " auto remove trailing witespace
+autocmd BufWritePre *.sh %s/\s\+$//e " auto remove trailing witespace
+
+syntax enable "Enable syntax hl
+
+
+set encoding=utf8
+try
+    lang en_US
+    set spelllang=en_us
+catch
+endtry
+
+set ffs=unix,dos,mac "Default file types
+
+set ls=2
+set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
+
+" Look for mode type in first 5 lines
+"set modeline=5
+"

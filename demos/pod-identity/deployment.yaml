@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: riv23-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: riv23-demo
+  name: riv23-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: riv23-demo
+  template:
+    metadata:
+      labels:
+        app: riv23-demo
+    spec:
+      serviceAccount: riv23-demo
+      containers:
+      - image: "public.ecr.aws/amazonlinux/amazonlinux:2023"
+        name: aws-cli
+        command:
+        - /mnt/setup/init.sh
+        env:
+        - name: BUCKET_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: pod-setup
+              key: bucket-name
+        - name: CLUSTER_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: pod-setup
+              key: cluster-name
+        - name: POD_UID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.uid
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+        volumeMounts:
+        - mountPath: /mnt/setup
+          name: pod-setup
+          readOnly: true
+        - mountPath: /mnt/demo
+          name: demo-scripts
+          readOnly: false
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: ".5"
+          limits:
+            memory: "256Mi"
+            cpu: "1"
+      volumes:
+      - name: pod-setup
+        configMap:
+          name: pod-setup
+          defaultMode: 0755
+      - name: demo-scripts
+        configMap:
+          name: demo-scripts
+          defaultMode: 0755
