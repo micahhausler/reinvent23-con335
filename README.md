@@ -2,12 +2,14 @@
 
 This repo contains setup scripts used to demonstrate EKS Pod Identity (2023) and EKS Cluster Access Management (coming soon).
 
+
+<a href="https://www.youtube.com/watch?v=iyMcOpXRVWk&list=PL2yQDdvlhXf93SMk5EpQVIq4kdWQhUcMV"><img src='img/con335-recording.png' width='300'></a>
+
 ## EKS Pod Identity 
 ![pod identity](./pod-identity.gif)
 
 ## EKS Cluster Access Management
 ![cam](./cam.gif)
-
 
 ## Setup
 
