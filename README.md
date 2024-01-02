@@ -1,6 +1,8 @@
 # AWS re:Invent 2023 CON335 - Securing Kubernetes Workloads in Amazon EKS - Demo
 
-This repo contains setup scripts used to demonstrate EKS Pod Identity (2023) and EKS Cluster Access Management (coming soon).
+This repo contains setup scripts used to demonstrate [EKS Pod Identity (2023)](https://aws.amazon.com/about-aws/whats-new/2023/11/amazon-eks-pod-identity/) and [EKS Cluster Access Management (2023)](https://aws.amazon.com/about-aws/whats-new/2023/12/amazon-eks-controls-iam-cluster-access-management/). 
+* [Slides](https://d1.awsstatic.com/events/Summits/reinvent2023/CON335_Securing-Kubernetes-workloads-in-Amazon-EKS.pdf)
+* [YouTube](https://www.youtube.com/watch?v=iyMcOpXRVWk&list=PL2yQDdvlhXf93SMk5EpQVIq4kdWQhUcMV)
 
 
 <a href="https://www.youtube.com/watch?v=iyMcOpXRVWk&list=PL2yQDdvlhXf93SMk5EpQVIq4kdWQhUcMV"><img src='img/con335-recording.png' width='300'></a>
